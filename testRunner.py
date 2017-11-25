@@ -17,6 +17,7 @@ def getArns(functions: List[str], stage: str) -> List[str]:
   arns = {}
   while res is not None:
     for export in res["Exports"]:
+      print export
       if export["Name"] in functions:
         arns[export["Name"]] = export["Value"]
     if "NextToken" not in res:
