@@ -13,7 +13,7 @@ def getFunctionNames(path: str) -> List[str]:
 def getArns(functions: List[str], stage: str) -> List[str]:
   functions = list(map(lambda x: x + "ARN" + stage, functions))
   client = boto3.client('cloudformation')
-  res = client.list_exports(NextToken = "")
+  res = client.list_exports()
   arns = {}
   while res is not None:
     for export in res["Exports"]:
@@ -21,6 +21,8 @@ def getArns(functions: List[str], stage: str) -> List[str]:
         arns[export["Name"]] = export["Value"]
     if res["NextToken"] == "":
       res = None
+    else:
+      res = client.list_exports(NextToken = res["NextToken"])
   return arns
 
 def exec_tests(path: str, functions: List[str], stage: str):
