@@ -11,7 +11,7 @@ def getFunctionNames(path: str) -> List[str]:
   return list(xs)
 
 def getArns(functions: List[str], stage: str) -> List[str]:
-  functions = list(map(lambda x: x + "ARN" + stage, functions))
+  functions = list(map(lambda x: x + stage, functions))
   client = boto3.client('cloudformation')
   res = client.list_exports()
   arns = {}
@@ -29,7 +29,7 @@ def getArns(functions: List[str], stage: str) -> List[str]:
 def exec_tests(path: str, functions: List[str], stage: str):
   arns = getArns(functions, stage)
   for function in functions:
-    arn = arns[function + "ARN" + stage]
+    arn = arns[function + stage]
     test_file = "/".join(path, function, function + "Test.py")
     exec_cmd = " ".join(test_file, arn)
     status = os.system(exec_cmd)
