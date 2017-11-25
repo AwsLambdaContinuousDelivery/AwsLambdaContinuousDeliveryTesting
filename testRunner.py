@@ -30,8 +30,8 @@ def exec_tests(path: str, functions: List[str], stage: str):
   arns = getArns(functions, stage)
   for function in functions:
     arn = arns[function + stage]
-    test_file = "/".join(path, function, function + "Test.py")
-    exec_cmd = " ".join(test_file, arn)
+    test_file = "/".join([path, function, function + "Test.py"])
+    exec_cmd = " ".join([test_file, arn])
     status = os.system(exec_cmd)
     if status is not 0:
       return status
