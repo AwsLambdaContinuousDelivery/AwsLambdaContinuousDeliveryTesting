@@ -28,7 +28,7 @@ def getArns(functions: List[str], stage: str) -> List[str]:
 def exec_tests(path: str, functions: List[str], stage: str):
   arns = getArns(functions, stage)
   for function in functions:
-    arn = arns[function]
+    arn = arns[function + "ARN" + stage]
     test_file = "/".join(path, function, function + "Test.py")
     exec_cmd = " ".join(test_file, arn)
     status = os.system(exec_cmd)
