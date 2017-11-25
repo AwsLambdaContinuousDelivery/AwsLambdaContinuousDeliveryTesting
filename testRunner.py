@@ -26,7 +26,7 @@ def exec_tests(path: str, functions: List[str], stage: str):
     arn = arns[function]
     test_file = "/".join(path, function, function + "Test.py")
     exec_cmd = " ".join(test_file, arn)
-    status = os.system(test_file arn)
+    status = os.system(exec_cmd)
     if status is not 0:
       return status
   return 0
