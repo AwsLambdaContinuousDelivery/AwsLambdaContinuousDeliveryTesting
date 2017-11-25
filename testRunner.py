@@ -1,5 +1,7 @@
 import os, sys, boto3
 
+from typing import List
+
 def getFunctionNames(path: str) -> List[str]:
   ''' Returns all Folders names in the paths '''
   xs = os.listdir(path)
