@@ -7,7 +7,7 @@ def getFunctionNames(path: str) -> List[str]:
   xs = filter(lambda x: os.path.isdir(path + x), xs)
   return list(xs)
 
-def getArns(functions: List[str], stage: str) -> List[str]
+def getArns(functions: List[str], stage: str) -> List[str]:
   functions = list(map(lambda x: x + "ARN" + stage, functions))
   client = boto3.client('cloudformation')
   res = client.list_exports(NextToken = "")
