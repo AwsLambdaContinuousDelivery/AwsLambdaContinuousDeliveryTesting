@@ -38,4 +38,4 @@ if __name__ == "__main__":
   parser.add_argument("-s", "--stage", help="Name of the stage", type = str)
   args = parser.parse_args()
   functions = getFunctionNames(args.path)
-  return exec_tests(args.path, functions, args.stage)
+  exec_tests(args.path, functions, args.stage)
