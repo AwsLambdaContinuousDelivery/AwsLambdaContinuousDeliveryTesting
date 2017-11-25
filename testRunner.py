@@ -19,7 +19,7 @@ def getArns(functions: List[str], stage: str) -> List[str]:
     for export in res["Exports"]:
       if export["Name"] in functions:
         arns[export["Name"]] = export["Value"]
-    if res["NextToken"] == "":
+    if "NextToken" not in res:
       res = None
     else:
       res = client.list_exports(NextToken = res["NextToken"])
