@@ -29,7 +29,7 @@ def getArns(functions: List[str], stack: str, stage: str) -> List[str]:
 def exec_tests(path: str, functions: List[str], stack: str, stage: str):
   arns = getArns(functions, stack, stage)
   for function in functions:
-    arn = arns[function + stage]
+    arn = arns["".join([function, stack, stage])]
     test_file = "/".join([path[:-1], function, function + "Test.py"])
     #TODO add a test whether the file exists
     exec_cmd = " ".join(["python3", test_file, arn])
