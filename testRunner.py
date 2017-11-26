@@ -17,7 +17,7 @@ def getArns(functions: List[str], stack: str, stage: str) -> List[str]:
   client = boto3.client('cloudformation')
   res = client.list_exports()
   arns = {}
-  print(red["Exports"])
+  print(res["Exports"])
   while res is not None:
     for export in res["Exports"]:
       if export["Name"] in functions:
