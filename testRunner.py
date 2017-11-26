@@ -13,13 +13,15 @@ def getFunctionNames(path: str) -> List[str]:
 
 def getArns(functions: List[str], stack: str, stage: str) -> List[str]:
   functions = list(map(lambda x: "".join([x, stack, stage]), functions))
+  print(functions)
   client = boto3.client('cloudformation')
   res = client.list_exports()
   arns = {}
+  print(red["Exports"])
   while res is not None:
     for export in res["Exports"]:
       if export["Name"] in functions:
-        arns[export["Name"]] = export["Value"]
+        arns[] = export["Value"]
     if "NextToken" not in res:
       res = None
     else:
