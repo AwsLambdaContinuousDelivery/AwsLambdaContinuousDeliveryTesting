@@ -32,7 +32,7 @@ def exec_tests(path: str, functions: List[str], stage: str):
   for function in functions:
     arn = arns[function + stage]
     test_file = "/".join([path[:-1], function, function + "Test.py"])
-    exec_cmd = " ".join([test_file, arn])
+    exec_cmd = " ".join(["python3", test_file, arn])
     result = subprocess.check_output(exec_cmd, shell=True)
     print(result)
   return 0
