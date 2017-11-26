@@ -1,5 +1,6 @@
 import os, sys, boto3
 import argparse
+import subprocess
 
 from typing import List
 
@@ -32,9 +33,8 @@ def exec_tests(path: str, functions: List[str], stage: str):
     arn = arns[function + stage]
     test_file = "/".join([path, function, function + "Test.py"])
     exec_cmd = " ".join([test_file, arn])
-    status = os.system(exec_cmd)
-    if status is not 0:
-      return status
+    result = subprocess.check_output(exec_cmd, shell=True)
+    print(result)
   return 0
 
 if __name__ == "__main__":
