@@ -18,7 +18,6 @@ def getArns(functions: List[str], stage: str) -> List[str]:
   arns = {}
   while res is not None:
     for export in res["Exports"]:
-      print(export)
       if export["Name"] in functions:
         arns[export["Name"]] = export["Value"]
     if "NextToken" not in res:
@@ -32,6 +31,7 @@ def exec_tests(path: str, functions: List[str], stage: str):
   for function in functions:
     arn = arns[function + stage]
     test_file = "/".join([path[:-1], function, function + "Test.py"])
+    #TODO add a test whether the file exists
     exec_cmd = " ".join(["python3", test_file, arn])
     result = subprocess.check_output(exec_cmd, shell=True)
     print(result)
