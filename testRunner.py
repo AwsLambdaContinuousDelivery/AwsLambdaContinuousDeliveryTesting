@@ -41,7 +41,8 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("-p", "--path", help="Path of the folder with the source \
                        -code of the aws lambda functions", type = str)
-  parser.add_argument("-s", "--stage", help="Name of the stage", type = str)
+  parser.add_argument("--stack", help="StackName", type = str)
+  parser.add_argument("--stage", help="Name of the stage", type = str)
   args = parser.parse_args()
   functions = getFunctionNames(args.path)
   exec_tests(args.path, functions, args.stage)
