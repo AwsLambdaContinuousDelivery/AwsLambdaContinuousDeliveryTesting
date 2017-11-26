@@ -40,9 +40,9 @@ def exec_tests(path: str, functions: List[str], stack: str, stage: str):
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("-p", "--path", help="Path of the folder with the source \
-                       -code of the aws lambda functions", type = str)
-  parser.add_argument("--stack", help="StackName", type = str)
-  parser.add_argument("--stage", help="Name of the stage", type = str)
+                       -code of the aws lambda functions", type = str, required = True)
+  parser.add_argument("--stack", help="StackName", type = str, required = True)
+  parser.add_argument("--stage", help="Name of the stage", type = str, required = True)
   args = parser.parse_args()
   functions = getFunctionNames(args.path)
-  exec_tests(args.path, functions, args.stage)
+  exec_tests(args.path, functions, args.stack, args.stage)
