@@ -32,7 +32,7 @@ def exec_tests(path: str, functions: List[str], stack: str, stage: str):
   for function in functions:
     arn = arns["".join([function, stack, stage])]
     test_file = "/".join([path[:-1], function, function + "Test.py"])
-    if(os.path.isfile(test_file))):
+    if os.path.isfile(test_file):
       exec_cmd = " ".join(["python3", test_file, arn])
       result = subprocess.check_output(exec_cmd, shell=True)
     print(result)
