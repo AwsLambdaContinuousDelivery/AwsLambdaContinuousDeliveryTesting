@@ -1,40 +1,45 @@
 import os, sys, boto3
 import argparse
 import subprocess
+import yaml
 
 from typing import List
 
-def getFunctionNames(path: str) -> List[str]:
-  ''' Returns all Folders names in the paths '''
-  xs = os.listdir(path)
-  xs = filter(lambda x: x[0] != ".", xs)
-  xs = filter(lambda x: os.path.isdir(path + x), xs)
-  return list(xs)
+def getTests(path: str) -> List[str]:
+  files = os.listdir(path)
+  files = map(lambda x: "/".join([path, x]), files)
+  files = filter(lambda x: x.endswith(".py"), files)
+  return list(files)
 
-def getArns(functions: List[str], stack: str, stage: str) -> List[str]:
-  functions = list(map(lambda x: "".join([x, stack, stage]), functions))
-  print(functions)
+def loadConfig(path: str) -> dict:
+  config = {}
+  with open (path + "/config/config.yaml", "r") as c:
+    config = yaml.load(c)
+  if not config:
+    raise Exception("Empty config")
+  return config
+
+def getArn(path: str, stack: str, stage: str) -> str:
+  config = loadConfig(path)
+  funcName = config["Name"] + stack + stage
   client = boto3.client('cloudformation')
   res = client.list_exports()
-  arns = {}
   while res is not None:
     for export in res["Exports"]:
-      if export["Name"] in functions:
-        arns[export["Name"]] = export["Value"]
+      if export["Name"] == funcName:
+        return export["Value"]
     if "NextToken" not in res:
       res = None
     else:
       res = client.list_exports(NextToken = res["NextToken"])
-  return arns
+  raise Exception("No ARN found for " + funcName)
 
-def exec_tests(path: str, functions: List[str], stack: str, stage: str):
-  arns = getArns(functions, stack, stage)
-  for function in functions:
-    arn = arns["".join([function, stack, stage])]
-    test_file = "/".join([path[:-1], function, function + "Test.py"])
-    if os.path.isfile(test_file):
-      exec_cmd = " ".join(["python3", test_file, arn])
-      result = subprocess.check_output(exec_cmd, shell=True)
+def exec_tests(path: str, stack: str, stage: str):
+  arn = getArn(path, stack, stage)
+  tests = getTests(path + "/test")
+  for test_file in tests:
+    exec_cmd = " ".join(["python3", test_file, arn])
+    result = subprocess.check_output(exec_cmd, shell=True)
     print(result)
   return 0
 
@@ -45,5 +50,4 @@ if __name__ == "__main__":
   parser.add_argument("--stack", help="StackName", type = str, required = True)
   parser.add_argument("--stage", help="Name of the stage", type = str, required = True)
   args = parser.parse_args()
-  functions = getFunctionNames(args.path)
-  exec_tests(args.path, functions, args.stack, args.stage)
+  exec_tests(args.path, args.stack, args.stage)
