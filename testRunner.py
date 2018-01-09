@@ -19,8 +19,7 @@ def loadConfig(path: str) -> dict:
     raise Exception("Empty config")
   return config
 
-def getArn(path: str, stack: str, stage: str) -> str:
-  config = loadConfig(path)
+def getArn(config: dict, stack: str, stage: str) -> str:
   funcName = config["Name"] + stack + stage
   client = boto3.client('cloudformation')
   res = client.list_exports()
@@ -34,9 +33,17 @@ def getArn(path: str, stack: str, stage: str) -> str:
       res = client.list_exports(NextToken = res["NextToken"])
   raise Exception("No ARN found for " + funcName)
 
+def getTestFolder(config: dict) -> str:
+  if "TestFolder" in config:
+    return config["TestFolder"]
+  return "test"
+
+
 def exec_tests(path: str, stack: str, stage: str):
-  arn = getArn(path, stack, stage)
-  tests = getTests(path + "/test")
+  config = loadConfig(path)
+  testfolder = getTestFolder(config)
+  arn = getArn(config, stack, stage)
+  tests = getTests("/".join([path, testfolder]))
   for test_file in tests:
     exec_cmd = " ".join(["python3", test_file, arn])
     result = subprocess.check_output(exec_cmd, shell=True)
