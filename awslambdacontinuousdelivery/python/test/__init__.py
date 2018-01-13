@@ -43,7 +43,7 @@ def getTestBuildCode() -> List[str]:
          , "      - pip3 install boto3 pyyaml"
          , "  build:"
          , "    commands:"
-         , "      - wget https://raw.githubusercontent.com/AwsLambdaContinuousDelivery/AwsLambdaTesting/dev/testRunner.py"
+         , "      - wget https://raw.githubusercontent.com/AwsLambdaContinuousDelivery/AwsLambdaTesting/dev/executable/testRunner.py"
          ]
 
 
