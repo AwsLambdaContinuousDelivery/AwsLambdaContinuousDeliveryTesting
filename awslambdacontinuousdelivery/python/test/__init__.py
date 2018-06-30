@@ -8,7 +8,7 @@ from awslambdacontinuousdelivery.tools.iam import defaultAssumeRolePolicyDocumen
 
 from troposphere import Template, Join, Sub, Ref
 from troposphere.codebuild import Project, Environment, Source, Artifacts
-from troposphere.codepipeline import (Stages, Actions, ActionTypeID
+from troposphere.codepipeline import (Stages, Actions, ActionTypeId
   , InputArtifacts)
 from troposphere.iam import Role, Policy
 
@@ -48,7 +48,7 @@ def getTestBuildCode() -> List[str]:
 
 
 def buildCfWithDockerAction( buildRef, inputName: str) -> Action:
-  actionId = ActionTypeID( Category = "Build"
+  actionId = ActionTypeId( Category = "Build"
                          , Owner = "AWS"
                          , Version = "1"
                          , Provider = "CodeBuild"
